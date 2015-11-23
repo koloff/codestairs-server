@@ -1,12 +1,17 @@
-"use strict";
-
-let routes = require('./routes/api');
-
+'use strict';
 
 let express = require('express');
 let app = express();
 
-app.use('/', routes);
+let config = require('./config/config');
+
+let routes = require('./routes/api');
+
+// Bootstrap express with routes
+require('./config/express')(app, routes);
+// Bootstrap mongoose
+require('./config/mongoose')(config);
 
 
-app.listen(1234, () => {console.log(`App listening on port ${3000}`);});
+let port = config.port;
+app.listen(port, () => {console.log(`App listening on port ${port}`);});

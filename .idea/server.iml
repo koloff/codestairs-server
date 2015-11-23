@@ -7,8 +7,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="server node_modules" level="project" />
     <orderEntry type="library" name="mongoose-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="express-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="server node_modules" level="project" />
   </component>
 </module>

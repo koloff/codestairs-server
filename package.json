@@ -9,8 +9,13 @@
   "author": "Anton Kolov",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.1",
     "co": "^4.6.0",
     "express": "^4.13.3",
-    "mongoose": "^4.2.6"
+    "mongoose": "^4.2.6",
+    "superagent": "^1.4.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.6.1"
   }
 }

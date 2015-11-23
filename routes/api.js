@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 let router = require('express').Router();
-let controller = require('../controllers/entries');
+let entriesController = require('../controllers/entries');
 
 
 router.route('/entries')
-  .get(controller.getEntry);
+  .post(entriesController.save);
 
 
 module.exports = router;
