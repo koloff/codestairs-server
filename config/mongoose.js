@@ -3,6 +3,8 @@ let mongoose = require('mongoose');
 
 module.exports = function(config) {
 
+  mongoose.Promise = require('bluebird');
+
   mongoose.connect(config.db);
   var db = mongoose.connection;
 

@@ -1,7 +1,7 @@
 'use strict';
 let mongoose = require('mongoose');
 
-let entrySchema = new mongoose.Schema({
+let resourceSchema = new mongoose.Schema({
   url: {
     type: String,
     regexp: new RegExp('/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/'),
@@ -25,11 +25,19 @@ let entrySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tags: [Object],
+  text: String,
+  html: String,
+  tags: Array,
   description: {
     type: String
   }
 });
 
+resourceSchema.index(
+  {title: 'text'},
+  {text: 'text'}
+);
 
-module.exports = mongoose.model('Entry', entrySchema);
+
+
+module.exports = mongoose.model('Resource', resourceSchema);

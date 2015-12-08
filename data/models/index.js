@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-  Entry: require('./entry')
+  Resource: require('./resource'),
+  Course: require('./course')
 };
