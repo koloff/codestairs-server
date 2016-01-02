@@ -12,6 +12,5 @@ require('./config/express')(app, routes);
 // Bootstrap mongoose
 require('./config/mongoose')(config);
 
-
 let port = config.port;
 app.listen(port, () => {console.log(`App listening on port ${port}`);});

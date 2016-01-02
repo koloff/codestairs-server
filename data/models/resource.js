@@ -25,19 +25,28 @@ let resourceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  titleExtracted: {
+    type: String
+  },
   text: String,
   html: String,
   tags: Array,
   description: {
     type: String
+  },
+  screenshot: {
+    data: Buffer,
+    contentType: String
   }
 });
 
 resourceSchema.index(
-  {title: 'text'},
-  {text: 'text'}
+  {
+    title: 'text',
+    titleExtracted: 'text',
+    description: 'text',
+    text: 'text'
+  }
 );
-
-
 
 module.exports = mongoose.model('Resource', resourceSchema);

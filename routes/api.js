@@ -8,6 +8,12 @@ let searchController = require('../controllers/search');
 router.route('/resources')
   .post(resourcesController.save);
 
+router.route('/courses')
+  .post(coursesController.save);
+
+router.route('/courses/:courseId')
+  .post(coursesController.insertResources); //todo
+
 router.route('/search/:searchType')
   .get(searchController.search);
 

@@ -12,19 +12,31 @@ exports.search = function(req, res) {
 
     // different type of search
 
-    if (searchType === 'resource') {
+    if (searchType === 'resources') {
       co(function *() {
         try {
-        	let result = yield resources.search(phrase);
+          let result = yield resources.search(phrase);
           console.log('Resources search completed!');
           res.status(200).send(result);
-        } catch(err) {
+        } catch (err) {
+          res.status(400).end();
+        }
+      });
+    } else if (searchType == 'courses') {
+      co(function *() {
+        try {
+          console.log('searching courses...');
+          let result = yield courses.search(phrase);
+          console.log('Courses search completed!');
+          res.status(200).send(result);
+        } catch (err) {
+          console.log(err);
           res.status(400).end();
         }
       });
     } else {
       // invalid search type
-      res.send(400).send({
+      res.status(400).send({
         reason: 'INVALID_SEARCHTYPE'
       });
     }

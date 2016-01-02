@@ -7,7 +7,7 @@ let Resource = require('./models').Resource;
 exports.save = function(resource) {
     return co(function *() {
       let resourceToSave = new Resource(resource);
-      yield resourceToSave.save();
+      return yield resourceToSave.save();
     });
 };
 
