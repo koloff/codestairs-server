@@ -49,17 +49,36 @@ exports.search = function(phrase) {
     });
 
     let coursesByResources = [];
+    console.log(resourcesIds);
     if (resourcesIds.length > 0) {
       // look for courses that contain some of the found resources
       coursesByResources = yield Course.find({
-        resources: {$in: [resourcesIds]}
+        resources: {$in: resourcesIds}
       }).exec();
     }
 
-    console.log('Courses by data:');
-    console.log(coursesByData);
-    console.log('Courses by resources');
-    console.log(coursesByResources);
+
+    // join te results
+    let resultMerged = coursesByData;
+    let courseAdded; // is the course already in the first array
+    coursesByResources.forEach((courseByResource) => {
+      courseAdded = false;
+      // check for duplication
+      coursesByData.forEach((courseByData) => {
+        if (courseByData._id === courseByResource._id) {
+          courseAdded = true;
+        }
+      });
+
+      if (!courseAdded) {
+        resultMerged.push(courseByResource);
+      }
+    });
+
+    console.log('result merged: ');
+    console.log(resultMerged);
+
+    return resultMerged;
   });
 };
 

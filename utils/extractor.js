@@ -4,7 +4,8 @@ let token = require('../config/config').diffbotToken;
 
 let request = require('superagent');
 
-let diffBotUrl = 'http://api.diffbot.com/v3/analyze';
+const diffBotUrl = 'http://api.diffbot.com/v3/analyze';
+
 
 /**
  * Gets url and extract page content
@@ -56,4 +57,39 @@ exports.getScreenshot = function(url, locationOfImage){
   });
 
   return promise;
+};
+
+/**
+ * Get url and remove protocol, 'www.' and '/' in the end
+ * @param url
+ * @returns {String}
+ */
+exports.shortenUrl = function(url) {
+
+  if (!url) {
+    return '';
+  }
+
+  let shortened = url;
+
+  // remove protocol
+  let protocolPos = url.indexOf('://');
+  if (protocolPos !== -1) {
+    let protocolPosEnd = protocolPos + 3;
+    shortened = url.slice(protocolPosEnd, url.length);
+  }
+
+  // remove www if available
+  let wwwPos = shortened.indexOf('www.');
+  if (wwwPos !== -1 && shortened.slice(0, 3) === 'www') {
+    let wwwPosEnd = wwwPos + 4;
+    shortened = shortened.slice(wwwPosEnd, shortened.length);
+  }
+
+  // remove the slash in the end if available
+  if (shortened[shortened.length - 1] === '/') {
+    shortened = shortened.slice(0, shortened.length - 1);
+  }
+
+  return shortened;
 };

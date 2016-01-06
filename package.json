@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "Anton Kolov",
   "license": "ISC",
@@ -13,7 +14,9 @@
     "body-parser": "^1.14.1",
     "co": "^4.6.0",
     "express": "^4.13.3",
+    "helmet": "^1.0.1",
     "mongoose": "^4.2.7",
+    "node-uuid": "^1.4.7",
     "superagent": "^1.4.0",
     "webshot": "^0.16.0"
   },

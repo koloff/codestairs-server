@@ -6,6 +6,7 @@ let coursesController = require('../controllers/courses');
 let searchController = require('../controllers/search');
 
 router.route('/resources')
+  .get(resourcesController.getResource)
   .post(resourcesController.save);
 
 router.route('/courses')

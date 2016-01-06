@@ -2,10 +2,14 @@
 let mongoose = require('mongoose');
 
 let resourceSchema = new mongoose.Schema({
+
+  // shortened  -  no protocol, 'www.' or '/' in the end (in order to be unique)
   url: {
     type: String,
+    // the regex passes not shortened - will fix in the future
     regexp: new RegExp('/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/'),
-    required: true
+    required: true,
+    unique: true
   },
   type: {
     type: String
@@ -25,19 +29,14 @@ let resourceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  titleExtracted: {
-    type: String
-  },
   text: String,
   html: String,
   tags: Array,
-  description: {
-    type: String
+  dateAdded: {
+    type: Date,
+    default: Date.now
   },
-  screenshot: {
-    data: Buffer,
-    contentType: String
-  }
+  screenshotFile: String
 });
 
 resourceSchema.index(
@@ -48,5 +47,19 @@ resourceSchema.index(
     text: 'text'
   }
 );
+
+resourceSchema
+  .virtual('short')
+  .get(function() {
+    return {
+      _id: this._id,
+      title: this.title,
+      url: this.url,
+      screenshotUrl: this.screenshotFile,
+      dateAdded: this.dateAdded,
+      rating: this.rating,
+      comments: this.comments
+    }
+  });
 
 module.exports = mongoose.model('Resource', resourceSchema);
