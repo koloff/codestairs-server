@@ -55,6 +55,7 @@ resourceSchema
       _id: this._id,
       title: this.title,
       url: this.url,
+      type: this.type,
       screenshotUrl: this.screenshotFile,
       dateAdded: this.dateAdded,
       rating: this.rating,

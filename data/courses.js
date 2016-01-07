@@ -1,6 +1,7 @@
 'use strict';
 
 let co = require('co');
+let _ = require('lodash');
 let resources = require('./resources');
 let Course = require('./models').Course;
 
@@ -57,28 +58,24 @@ exports.search = function(phrase) {
       }).exec();
     }
 
+    console.log('coursesByData');
+    console.log(coursesByData);
+    console.log('coursesByResources');
+    console.log(coursesByResources);
 
-    // join te results
-    let resultMerged = coursesByData;
-    let courseAdded; // is the course already in the first array
-    coursesByResources.forEach((courseByResource) => {
-      courseAdded = false;
-      // check for duplication
-      coursesByData.forEach((courseByData) => {
-        if (courseByData._id === courseByResource._id) {
-          courseAdded = true;
-        }
-      });
 
-      if (!courseAdded) {
-        resultMerged.push(courseByResource);
-      }
-    });
+    // join te results and remove duplicates
+    let union = _(_.union(coursesByData, coursesByResources))
+      .uniq(item => item.id)
+      .value();
 
     console.log('result merged: ');
-    console.log(resultMerged);
+    console.log(union);
 
-    return resultMerged;
+    return union;
+  }).catch((err) => {
+    console.log(err.stack);
+    res.status(500).send({reason: 'ERROR'});
   });
 };
 

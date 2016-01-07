@@ -1,31 +1,28 @@
+/*
+  this file is just for testing of some features of JS, node and the libraries
+ */
+
 'use strict';
 
-function shortenUrl(url) {
+let _ = require('lodash');
 
-  let shortened;
 
-  // remove protocol
-  let protocolPos = url.indexOf('://');
-  if (protocolPos !== -1) {
-    let protocolPosEnd = protocolPos + 3;
-    shortened = url.slice(protocolPosEnd, url.length);
-  }
+let arr1 = [
+  {id: '11', b: 22},
+  {id: '11', b: 22},
+  {id: '22', b: 11},
+  {id: '11', b: 22},
+  {id: '13', b: 2235}
+];
 
-  // remove www if available
-  let wwwPos = url.indexOf('www.');
-  if (wwwPos !== -1 && shortened.slice(0, 3) === 'www') {
-    let wwwPosEnd = wwwPos + 4;
-    shortened = url.slice(wwwPosEnd, url.length);
-  }
+let arr2 = [
+  {id: '11', b: 22},
+  {id: '17', b: 22},
+  {id: '22', b: 11},
+  {id: '11', b: 22},
+  {id: '13', b: 2235}
+];
 
-  // remove the slash in the end if available
-  if (shortened[shortened.length - 1] === '/') {
-    shortened = shortened.slice(0, shortened.length - 1);
-  }
 
-  return shortened;
-}
-
-shortenUrl('https://www.mail.google.com/mail/u/0/#inbox/');
-
-shortenUrl('https://mail.google.com/mail/u/0/#inbox/');
+var union = _(_.union(arr1, arr2)).uniq(item => item.id).value();
+console.log(union);

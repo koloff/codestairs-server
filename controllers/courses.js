@@ -3,21 +3,21 @@ let co = require('co');
 let courses = require('../data/courses');
 
 exports.save = function(req, res) {
-  console.log('saving course...');
-  let course = {
-    title: req.body.title,
-    description: req.body.description
-  };
+  console.log('saving course controller...');
+  let course = req.body;
 
   co(function *() {
     try {
-      courses.save(course);
+      let savedCourse = yield courses.save(course);
       console.log('Course created');
       res.status(200).send({
-        ok: true
+        ok: true,
+        course: savedCourse
       });
     } catch (err) {
-      console.log('Error in creating course controller: ' + err);
+      console.log('Error in creating course controller:');
+      console.log(err.trace);
+      res.status(500).send({reason: 'CANNOT_SAVE'});
     }
   });
 };

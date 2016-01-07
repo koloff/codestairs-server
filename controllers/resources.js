@@ -33,9 +33,10 @@ exports.save = function(req, res) {
         imgPromise: extractor.getScreenshot(options.url, imgDirectory)
       }
     } catch (err) {
-      console.log('extractor error');
+      // most likely the url is invalid
+      console.log('extractor errorrrr');
       console.log(err);
-      res.status(400).end();
+      res.status(400).send({reason: 'INVALID_URL'}).end();
     }
     // after the parallel execution get the extracted page data
     let extractedPage = result.extractedPage;
@@ -43,32 +44,31 @@ exports.save = function(req, res) {
 
     if (extractedPage) {
       console.log('PAGE EXTRACTED');
-
       console.log(extractedPage);
 
-      // selects the required fields
-      let data = extractedPage.objects[0];
-
-      // the page cannot be fully extracted
-      if (!data) {
-        res.status(404).send({reason: 'CANNOT_EXTRACT'});
-        res.end();
-      }
-
       // get shortened url
-      let shortenedUrl = extractor.shortenUrl(data.pageUrl);
+      let shortenedUrl = extractor.shortenUrl(options.url);
 
       // prepare for save
-      let resource = {
+      let resource;
+
+      // available to all extracted
+      resource = {
         url: shortenedUrl,
         type: extractedPage.type,
         humanLanguage: extractedPage.humanLanguage,
-        title: data.title || shortenedUrl,
-        tags: data.tags,
-        html: data.html,
-        text: data.text,
-        screenshotFile: randomImgName + '.jpg'
+        screenshotFile: randomImgName + '.jpg',
+        title: extractedPage.title || shortenedUrl
       };
+
+      // available only to successfully fully analyzed
+      let analyzedData = extractedPage.objects[0];
+      if (analyzedData) {
+        resource.title = analyzedData.title;
+        resource.tags = analyzedData.tags;
+        resource.html = analyzedData.html;
+        resource.text = analyzedData.text;
+      }
 
       // save in db
       try {
