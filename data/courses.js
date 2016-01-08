@@ -12,6 +12,36 @@ exports.save = function(course) {
   });
 };
 
+exports.findById = function (id){
+  return co(function *() {
+    let result = yield Course.find(id);
+    return result;
+  });
+};
+
+exports.getMultiple = function(start, count) {
+  return co(function *() {
+    let startPos = start | 0;
+    let howMany = count | 0;
+
+    if (start < 0 || start > 999 || count < 0 || count > 999) {
+      throw 'INVALID_ARGUMENTS';
+    }
+
+    let courses = yield Course
+      .find()
+      .sort('-dateAdded')
+      .skip(startPos)
+      .limit(howMany)
+      .populate('resources', '_id title url dateAdded humanLanguage type rating')
+      .exec();
+
+    console.log(courses);
+
+    return courses;
+  });
+};
+
 /**
  * Search for courses by first by their own title and description
  * then looks for resources which meets the search condition
@@ -28,6 +58,7 @@ exports.search = function(phrase) {
       {$text: {$search: phrase}},
       {score: {$meta: "textScore"}})
       .sort({score: {$meta: 'textScore'}})
+      .populate('resources', '-text -html -tags')
       .exec();
 
 
@@ -43,11 +74,7 @@ exports.search = function(phrase) {
     let coursesByData = res.getCoursesByDataAsync;
     let foundResources = res.getResourcesAsync;
 
-    // get the ids of the found resources
-    let resourcesIds = [];
-    foundResources.map((resource) => {
-      resourcesIds.push(resource._id);
-    });
+    let resourcesIds = _.pluck(foundResources, '_id');
 
     let coursesByResources = [];
     console.log(resourcesIds);
@@ -55,27 +82,28 @@ exports.search = function(phrase) {
       // look for courses that contain some of the found resources
       coursesByResources = yield Course.find({
         resources: {$in: resourcesIds}
-      }).exec();
+      })
+        .populate('resources', '-text -html -tags')
+        .exec();
     }
 
-    console.log('coursesByData');
-    console.log(coursesByData);
-    console.log('coursesByResources');
-    console.log(coursesByResources);
+    //console.log('coursesByData');
+    //console.log(coursesByData);
+    //console.log('coursesByResources');
+    //console.log(coursesByResources);
 
-
-    // join te results and remove duplicates
+     //join te results and remove duplicates
     let union = _(_.union(coursesByData, coursesByResources))
       .uniq(item => item.id)
       .value();
 
-    console.log('result merged: ');
     console.log(union);
 
     return union;
+
   }).catch((err) => {
     console.log(err.stack);
-    res.status(500).send({reason: 'ERROR'});
+    throw err;
   });
 };
 

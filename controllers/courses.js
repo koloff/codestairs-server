@@ -16,7 +16,7 @@ exports.save = function(req, res) {
       });
     } catch (err) {
       console.log('Error in creating course controller:');
-      console.log(err.trace);
+      console.log(err);
       res.status(500).send({reason: 'CANNOT_SAVE'});
     }
   });
@@ -40,4 +40,34 @@ exports.insertResources = function(req, res) {
     }
   });
 
+};
+
+
+function getMultiple(req, res) {
+  co(function *() {
+    try {
+      let result = yield courses.getMultiple(req.query.start, req.query.count);
+      console.log(result);
+      res.status(200).send(result);
+    } catch(err) {
+      console.log(err);
+      if (err === 'INVALID_ARGUMENTS') {
+        res.status(400).send({reason: err}).end();
+      }
+
+      res.status(500).send({reason: err}).end();
+    }
+  }).catch(err => console.log(err));
+}
+
+exports.getCourses = function(req, res) {
+  if (req.query._id) {
+    //getById(req, res);
+  } else if (req.query.start || req.query.count) {
+    getMultiple(req, res);
+  }
+
+  else {
+    res.status(400).send({reason: 'INVALID_QUERY'});
+  }
 };

@@ -102,20 +102,41 @@ exports.save = function(req, res) {
   });
 };
 
-exports.getResource = function(req, res) {
-  if (req.query._id) {
+exports.getResources = function(req, res) {
+  if (req.query.id) {
     getById(req, res);
   } else if (req.query.url) {
     getByUrl(req, res);
-  } else {
-    res.status(400).send({reason: 'INVALID_RESOURCE'});
+  } else if (req.query.start || req.query.count) {
+    getMultiple(req, res);
+  }
+
+  else {
+    res.status(400).send({reason: 'INVALID_QUERY'});
   }
 };
+
+function getMultiple(req, res) {
+  co(function *() {
+    try {
+      let result = yield resources.getMultiple(req.query.start, req.query.count);
+      console.log(result);
+      res.status(200).send(result);
+    } catch(err) {
+      console.log(err);
+      if (err === 'INVALID_ARGUMENTS') {
+        res.status(400).send({reason: err}).end();
+      }
+
+      res.status(500).send({reason: err}).end();
+    }
+  }).catch(err => console.log(err));
+}
 
 function getById(req, res) {
   co(function *() {
     try {
-      let resource = yield resources.findById(req.params._id);
+      let resource = yield resources.findById(req.params.id);
       res.send(resource);
     } catch (err) {
       console.log(err);

@@ -1,15 +1,25 @@
 'use strict';
 
 let router = require('express').Router();
+let authController = require('../controllers/auth');
+let usersController = require('../controllers/users');
 let resourcesController = require('../controllers/resources');
 let coursesController = require('../controllers/courses');
 let searchController = require('../controllers/search');
 
+router.route('/login')
+  .post(authController.login);
+
+router.route('/users')
+  .post(usersController.save);
+
 router.route('/resources')
-  .get(resourcesController.getResource)
+  .get(resourcesController.getResources)
   .post(resourcesController.save);
 
+
 router.route('/courses')
+  .get(coursesController.getCourses)
   .post(coursesController.save);
 
 router.route('/courses/:courseId')

@@ -11,6 +11,10 @@ let courseSchema = new mongoose.Schema({
   },
   resources: {
     type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Resource'}]
+  },
+  dateAdded: {
+    type: Date,
+    default: Date.now
   }
 });
 
