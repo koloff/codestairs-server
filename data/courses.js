@@ -12,7 +12,7 @@ exports.save = function(course) {
   });
 };
 
-exports.findById = function (id){
+exports.findById = function(id) {
   return co(function *() {
     let result = yield Course.find(id);
     return result;
@@ -81,8 +81,8 @@ exports.search = function(phrase) {
     if (resourcesIds.length > 0) {
       // look for courses that contain some of the found resources
       coursesByResources = yield Course.find({
-        resources: {$in: resourcesIds}
-      })
+          resources: {$in: resourcesIds}
+        })
         .populate('resources', '-text -html -tags')
         .exec();
     }
@@ -92,7 +92,7 @@ exports.search = function(phrase) {
     //console.log('coursesByResources');
     //console.log(coursesByResources);
 
-     //join te results and remove duplicates
+    //join te results and remove duplicates
     let union = _(_.union(coursesByData, coursesByResources))
       .uniq(item => item.id)
       .value();
@@ -104,6 +104,22 @@ exports.search = function(phrase) {
   }).catch((err) => {
     console.log(err.stack);
     throw err;
+  });
+};
+
+exports.rate = function(courseId, userId, value) {
+  return co(function *() {
+    let updatedCourse = yield Course.findByIdAndUpdate(courseId, {
+      'rating.value': value,
+      $push: {
+        'rating.votes' : {
+          user: userId,
+          value: value
+        }
+      }
+    });
+
+    return updatedCourse;
   });
 };
 

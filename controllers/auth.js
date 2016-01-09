@@ -50,22 +50,26 @@ exports.login = function(req, res) {
 exports.authenticate = function(role) {
   return function(req, res, next) {
 
+
+    console.log('authenticate');
     // We skip the token auth for [OPTIONS] requests.
     if(req.method === 'OPTIONS') next();
 
-    let token;
+    let accessToken;
     if (req.body && req.body.token) {
-      token = req.body.token;
+      accessToken = req.body.token;
     } else if (req.query && req.query.token) {
-      token = req.query.token;
+      accessToken = req.query.token;
     } else if (req. headers && req.headers['x-access-token']) {
-      token = req.headers['x-token'];
+      accessToken = req.headers['x-token'];
     }
 
     if (accessToken) {
+      console.log(accessToken);
       try {
         // can throw exceptions
-        var decodedToken = token.decode(token);
+        var decodedToken = token.decode(accessToken);
+        console.log(decodedToken);
 
         if (!role || (role && (decodedToken.roles && decodedToken.roles.indexOf(role) > -1))) {
           req.userId = decodedToken.userId;
@@ -74,7 +78,8 @@ exports.authenticate = function(role) {
           res.status(403).send({reason: 'NOT_AUTHORISED'}).end();
         }
 
-      } catch (ex) {
+      } catch (err) {
+        console.log(err);
         res.status(403).send({reason: 'INVALID_TOKEN'}).end();
       }
     } else {

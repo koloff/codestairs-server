@@ -1,5 +1,6 @@
 'use strict';
 let mongoose = require('mongoose');
+let ratingSchema = require('./rating');
 
 let courseSchema = new mongoose.Schema({
   title: {
@@ -15,7 +16,8 @@ let courseSchema = new mongoose.Schema({
   dateAdded: {
     type: Date,
     default: Date.now
-  }
+  },
+  rating: {type: ratingSchema, default: ratingSchema}
 });
 
 courseSchema.index({

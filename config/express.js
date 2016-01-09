@@ -1,10 +1,12 @@
 'use strict';
 let express = require('express');
+let path = require('path');
+let subdomain = require('express-subdomain');
 let morgan = require('morgan');
 let helmet = require('helmet');
 let bodyParser = require('body-parser');
 
-module.exports = function (app, routes) {
+module.exports = function(app, routes) {
 
   // allows CORS
   app.all('/*', function(req, res, next) {
@@ -25,13 +27,24 @@ module.exports = function (app, routes) {
   // logs requests
   app.use(morgan('dev'));
 
-  app.use('/static', express.static(__dirname + '/../static'));
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
 
+  //app.get('/', function(req, res, next) {
+  //  //Path to your main file
+  //  res.status(200).sendFile(path.join(__dirname + './config.js'));
+  //  next();
+  //});
+
   // use the api routes
-  app.use('/api/v1', routes);
+  app.use(subdomain('api', routes));
+
+  app.use(subdomain('static', express.static(path.join(__dirname + '/../static'))));
+
+  app.get('/*', function(req, res) {
+    res.status(200).sendFile(path.join(__dirname + '/../static/index.html'));
+  });
 
   // if no route is matched return 404
   app.use((req, res) => {

@@ -17,7 +17,6 @@ router.route('/resources')
   .get(resourcesController.getResources)
   .post(resourcesController.save);
 
-
 router.route('/courses')
   .get(coursesController.getCourses)
   .post(coursesController.save);
@@ -25,8 +24,12 @@ router.route('/courses')
 router.route('/courses/:courseId')
   .post(coursesController.insertResources); //todo
 
+router.route('/rate/course/:courseId')
+  .post(authController.authenticate(), coursesController.rate);
+
 router.route('/search/:searchType')
   .get(searchController.search);
+
 
 
 module.exports = router;

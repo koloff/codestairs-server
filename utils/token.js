@@ -4,7 +4,7 @@ let jwt = require('jwt-simple');
 let config = require('../config/config');
 
 exports.decode = function(token) {
-  return jwt.decode(token, config.TOKEN_SECRET);
+  return jwt.decode(token, config.secret);
 };
 
 exports.generate = function(user) {

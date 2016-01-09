@@ -71,3 +71,19 @@ exports.getCourses = function(req, res) {
     res.status(400).send({reason: 'INVALID_QUERY'});
   }
 };
+
+exports.rate = function(req, res) {
+  return co(function *() {
+    try {
+      console.log(req.userId);
+      console.log(req.body);
+      let result = yield courses.rate(req.params.courseId, req.userId, req.body.value);
+      console.log(result);
+      res.status(200).send(result.rating);
+    } catch (err) {
+      console.log(err);
+      res.status(500);
+    }
+
+  });
+};
