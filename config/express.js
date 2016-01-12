@@ -31,16 +31,12 @@ module.exports = function(app, routes) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
 
-  //app.get('/', function(req, res, next) {
-  //  //Path to your main file
-  //  res.status(200).sendFile(path.join(__dirname + './config.js'));
-  //  next();
-  //});
 
   // use the api routes
   app.use(subdomain('api', routes));
 
-  app.use(subdomain('static', express.static(path.join(__dirname + '/../static'))));
+  app.use('/static', express.static(path.join(__dirname + '/../static')));
+  app.use('/generated', express.static(path.join(__dirname + '/../generated')));
 
   app.get('/*', function(req, res) {
     res.status(200).sendFile(path.join(__dirname + '/../static/index.html'));

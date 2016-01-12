@@ -3,6 +3,7 @@ let co = require('co');
 let uuid = require('node-uuid');
 let extractor = require('../utils/extractor');
 let resources = require('../data/resources');
+let config = require('../config/config');
 
 
 /**
@@ -21,7 +22,7 @@ exports.save = function(req, res) {
     // create name and specifies the directory for the resource's screenshot
     let randomImgName = uuid.v4();
     console.log(randomImgName);
-    let imgDirectory = `static/images/resources-screenshots/${randomImgName}.jpg`;
+    let imgDirectory = `${config.generatedDir}/screenshots/${randomImgName}.jpg`;
 
     // parallel extraction of the page data and getting a screenshot
     let result;
