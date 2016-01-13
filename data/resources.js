@@ -30,8 +30,6 @@ exports.getMultiple = function(start, count) {
       .exec();
 
     let shortened = _.pluck(resources, 'short');
-    console.log(shortened);
-    
     
     return shortened;
   });

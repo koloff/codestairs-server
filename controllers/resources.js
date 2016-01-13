@@ -1,4 +1,5 @@
 'use strict';
+let path = require('path');
 let co = require('co');
 let uuid = require('node-uuid');
 let extractor = require('../utils/extractor');
@@ -22,7 +23,9 @@ exports.save = function(req, res) {
     // create name and specifies the directory for the resource's screenshot
     let randomImgName = uuid.v4();
     console.log(randomImgName);
-    let imgDirectory = `${config.generatedDir}/screenshots/${randomImgName}.jpg`;
+    let imgDirectory = path.resolve(config.generatedDir + '/screenshots/' +  randomImgName + '.jpg');
+    console.log('imggggggggg dirrrrrrr');
+    console.log(imgDirectory);
 
     // parallel extraction of the page data and getting a screenshot
     let result;
@@ -45,7 +48,7 @@ exports.save = function(req, res) {
 
     if (extractedPage) {
       console.log('PAGE EXTRACTED');
-      console.log(extractedPage);
+      //console.log(extractedPage);
 
       // get shortened url
       let shortenedUrl = extractor.shortenUrl(options.url);
@@ -121,7 +124,6 @@ function getMultiple(req, res) {
   co(function *() {
     try {
       let result = yield resources.getMultiple(req.query.start, req.query.count);
-      console.log(result);
       res.status(200).send(result);
     } catch(err) {
       console.log(err);
