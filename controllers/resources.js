@@ -139,8 +139,8 @@ function getMultiple(req, res) {
 function getById(req, res) {
   co(function *() {
     try {
-      let resource = yield resources.findById(req.params.id);
-      res.send(resource);
+      let resource = yield resources.findById(req.query.id);
+      res.send(resource.short);
     } catch (err) {
       console.log(err);
       res.send(500).send(err);
