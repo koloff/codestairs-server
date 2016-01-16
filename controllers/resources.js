@@ -19,12 +19,16 @@ exports.save = function(req, res) {
     let options = req.body;
     console.log(req.body);
 
+    // filter for blacklist words (please don't look bellow..)
+    if ( options.url.match( /(porn|sex|fuck|xxx|shit)/ ) ) {
+      throw 'FORBIDDEN_KEYWORS';
+    }
+
 
     // create name and specifies the directory for the resource's screenshot
     let randomImgName = uuid.v4();
     console.log(randomImgName);
     let imgDirectory = path.resolve(config.generatedDir + '/screenshots/' +  randomImgName + '.jpg');
-    console.log('imggggggggg dirrrrrrr');
     console.log(imgDirectory);
 
     // parallel extraction of the page data and getting a screenshot
@@ -38,7 +42,6 @@ exports.save = function(req, res) {
       }
     } catch (err) {
       // most likely the url is invalid
-      console.log('extractor errorrrr');
       console.log(err);
       res.status(400).send({reason: 'INVALID_URL'}).end();
     }
@@ -102,6 +105,7 @@ exports.save = function(req, res) {
     }
 
   }).catch((err) => {
+    res.status(500).send({reason: 'ERROR'});
     console.log(err.stack);
   });
 };
