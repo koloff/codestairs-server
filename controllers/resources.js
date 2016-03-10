@@ -19,16 +19,21 @@ exports.save = function(req, res) {
     let options = req.body;
     console.log(req.body);
 
-    // filter for blacklist words (please don't look bellow..)
-    if ( options.url.match( /(porn|sex|fuck|xxx|shit)/ ) ) {
-      throw 'FORBIDDEN_KEYWORS';
-    }
 
+    // check if resource is already added
+    let alreadySaved = yield resources.findByUrl(req.body.url);
+    if (alreadySaved) {
+      res.status(200).send({
+        ok: true,
+        resource: alreadySaved
+      });
+      return;
+    }
 
     // create name and specifies the directory for the resource's screenshot
     let randomImgName = uuid.v4();
     console.log(randomImgName);
-    let imgDirectory = path.resolve(config.generatedDir + '/screenshots/' +  randomImgName + '.jpg');
+    let imgDirectory = path.resolve(config.generatedDir + '/screenshots/' + randomImgName + '.jpg');
     console.log(imgDirectory);
 
     // parallel extraction of the page data and getting a screenshot
@@ -45,9 +50,9 @@ exports.save = function(req, res) {
       console.log(err);
       res.status(400).send({reason: 'INVALID_URL'}).end();
     }
+
     // after the parallel execution get the extracted page data
     let extractedPage = result.extractedPage;
-
 
     if (extractedPage) {
       console.log('PAGE EXTRACTED');
@@ -56,11 +61,8 @@ exports.save = function(req, res) {
       // get shortened url
       let shortenedUrl = extractor.shortenUrl(options.url);
 
-      // prepare for save
-      let resource;
-
       // available to all extracted
-      resource = {
+      let resource = {
         url: shortenedUrl,
         type: extractedPage.type,
         humanLanguage: extractedPage.humanLanguage,
@@ -80,8 +82,6 @@ exports.save = function(req, res) {
       // save in db
       try {
         let savedResource = yield resources.save(resource);
-        console.log('screenshot:');
-        console.log(savedResource.screenshot);
         console.log('Resource saved!');
         if (savedResource) {
           savedResource = savedResource.short;
@@ -94,13 +94,10 @@ exports.save = function(req, res) {
       } catch (err) {
         console.log('Resource saving err');
         console.log(err);
-
-        if (err.code == 11000) {
-          res.status(400).send({
-            ok: false,
-            reason: 'DUPLICATE_RESOURCE'
-          });
-        }
+        res.status(500).send({
+          ok: false,
+          reason: 'ERROR'
+        })
       }
     }
 
@@ -129,7 +126,7 @@ function getMultiple(req, res) {
     try {
       let result = yield resources.getMultiple(req.query.start, req.query.count);
       res.status(200).send(result);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       if (err === 'INVALID_ARGUMENTS') {
         res.status(400).send({reason: err}).end();

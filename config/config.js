@@ -4,7 +4,7 @@ let env = process.env || 'development';
 
 let config = {};
 
-config.diffbotToken = '8165c3f96112eafc42acabd7046fef0c';
+config.diffbotToken = '8ec1e7600797b5e85f5c484094bd6f2e';
 
 config.port = env.port || 3377;
 config.db = env.db || 'mongodb://localhost/codestairs';
