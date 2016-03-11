@@ -32,9 +32,7 @@ exports.save = function(req, res) {
 
     // create name and specifies the directory for the resource's screenshot
     let randomImgName = uuid.v4();
-    console.log(randomImgName);
     let imgDirectory = path.resolve(config.generatedDir + '/screenshots/' + randomImgName + '.jpg');
-    console.log(imgDirectory);
 
     // parallel extraction of the page data and getting a screenshot
     let result;
@@ -56,7 +54,7 @@ exports.save = function(req, res) {
 
     if (extractedPage) {
       console.log('PAGE EXTRACTED');
-      //console.log(extractedPage);
+      console.log(extractedPage);
 
       // get shortened url
       let shortenedUrl = extractor.shortenUrl(options.url);
@@ -71,8 +69,9 @@ exports.save = function(req, res) {
       };
 
       // available only to successfully fully analyzed
-      let analyzedData = extractedPage.objects[0];
-      if (analyzedData) {
+      if (extractedPage.objects && extractedPage.objects[0]) {
+        let analyzedData = extractedPage.objects[0];
+
         resource.title = analyzedData.title;
         resource.tags = analyzedData.tags;
         resource.html = analyzedData.html;

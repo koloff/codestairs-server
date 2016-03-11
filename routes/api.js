@@ -7,6 +7,8 @@ let resourcesController = require('../controllers/resources');
 let coursesController = require('../controllers/courses');
 let searchController = require('../controllers/search');
 
+let pathsController = require('../controllers/paths');
+
 router.route('/login')
   .post(authController.login);
 
@@ -20,6 +22,16 @@ router.route('/resources')
 router.route('/courses')
   .get(coursesController.getCourses)
   .post(coursesController.save);
+
+router.route('/paths')
+  .get(pathsController.getMultiple)
+  .post(pathsController.save);
+
+router.route('/paths/:id')
+  .get(pathsController.getById);
+
+router.route('/paths/edit/:editId')
+  .get(pathsController.getByEditId);
 
 router.route('/courses/:courseId')
   .post(coursesController.insertResources); //todo
