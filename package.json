@@ -16,10 +16,13 @@
     "express": "^4.13.3",
     "express-subdomain": "^1.0.4",
     "helmet": "^1.0.1",
+    "install": "^0.6.1",
     "jwt-simple": "^0.4.0",
     "lodash": "^3.10.1",
     "mongoose": "^4.2.7",
+    "mongoose-voting": "^0.3.0",
     "node-uuid": "^1.4.7",
+    "npm": "^3.8.3",
     "shortid": "^2.2.4",
     "superagent": "^1.4.0",
     "webshot": "*"

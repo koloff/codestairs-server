@@ -51,7 +51,6 @@ exports.authenticate = function(role) {
   return function(req, res, next) {
 
 
-    console.log('authenticate');
     // We skip the token auth for [OPTIONS] requests.
     if(req.method === 'OPTIONS') next();
 
@@ -65,11 +64,9 @@ exports.authenticate = function(role) {
     }
 
     if (accessToken) {
-      console.log(accessToken);
       try {
         // can throw exceptions
         var decodedToken = token.decode(accessToken);
-        console.log(decodedToken);
 
         if (!role || (role && (decodedToken.roles && decodedToken.roles.indexOf(role) > -1))) {
           req.userId = decodedToken.userId;

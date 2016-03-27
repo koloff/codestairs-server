@@ -1,6 +1,7 @@
 'use strict';
 let mongoose = require('mongoose');
 let shortid = require('shortid');
+let votes = require('./plugins/votes');
 
 let pathSchema = new mongoose.Schema({
   _id: {
@@ -30,18 +31,17 @@ let pathSchema = new mongoose.Schema({
   dateAdded: {
     type: Date,
     default: Date.now
-  },
-  rating: {
-    type: Number,
-    default: 0
   }
 });
 
 pathSchema.index({
+  dateAdded: -1,
   title: 'text',
   description: 'text',
   resources: 'text'
 });
+
+pathSchema.plugin(votes);
 
 
 module.exports = mongoose.model('Path', pathSchema);

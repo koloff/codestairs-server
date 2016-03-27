@@ -3,6 +3,6 @@
 module.exports = {
   User: require('./user'),
   Resource: require('./resource'),
-  Course: require('./course'),
-  Path: require('./path')
+  Path: require('./path'),
+  Request: require('./request')
 };

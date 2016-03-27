@@ -140,7 +140,12 @@ function getById(req, res) {
   co(function *() {
     try {
       let resource = yield resources.findById(req.query.id);
-      res.send(resource.short);
+      console.log(resource);
+      if (resource) {
+        res.status(200).send(resource.short);
+      } else {
+        res.status(404).end();
+      }
     } catch (err) {
       console.log(err);
       res.send(500).send(err);

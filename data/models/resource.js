@@ -1,6 +1,5 @@
 'use strict';
 let mongoose = require('mongoose');
-let ratingSchema = require('./rating');
 
 let resourceSchema = new mongoose.Schema({
 
@@ -37,10 +36,8 @@ let resourceSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     },
-    rating: ratingSchema,
     screenshotFile: String
-  })
-  ;
+  });
 
 resourceSchema.index(
   {

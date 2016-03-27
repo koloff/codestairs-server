@@ -4,6 +4,7 @@ let co = require('co');
 let _ = require('lodash');
 let resources = require('./resources');
 let Path = require('./models').Path;
+let users = require('./users');
 
 // todo
 exports.save = function(course) {
@@ -16,8 +17,8 @@ exports.save = function(course) {
   });
 };
 
-exports.getSingle= function(byWhat, identifier) {
-  console.log('getting single');
+exports.getSingle = function(byWhat, identifier) {
+  console.log('getting single path');
   let query = {};
   query[byWhat] = identifier;
 
@@ -32,25 +33,28 @@ exports.getSingle= function(byWhat, identifier) {
   });
 };
 
-exports.getMultiple = function(start, count) {
+exports.getMultiple = function(options) {
+
+  let period = options.period | 0;
+  let criteria = options.criteria;
+  let start = options.start | 0;
+  let count = options.count | 0;
+
+
   return co(function *() {
-    let startPos = start | 0;
-    let howMany = count | 0;
-
-    if (start < 0 || start > 999 || count < 0 || count > 999) {
-      throw 'INVALID_ARGUMENTS';
-    }
-
-    let paths = yield Path
+    let result = yield Path
       .find()
-      .sort('-dateAdded')
-      .skip(startPos)
-      .limit(howMany)
+      .where('dateAdded').gte(new Date().getTime() - 1000 * 60 * 60 * period)
+      .sort(`${criteria === 'most-liked' ? '-rating.value' : '-dateAdded'}`)
+      .skip(start)
+      .limit(count)
       .exec();
 
-    console.log(paths);
+    console.log(result);
 
-    return paths;
+    console.log('result');
+    return result;
+
   });
 };
 
@@ -117,4 +121,14 @@ exports.search = function(phrase) {
     console.log(err.stack);
     throw err;
   });
+};
+
+
+exports.rate = function(userId, pathId, value) {
+  return co(function *() {
+      let path = yield Path.findById(pathId);
+      let result = yield path.vote(userId, value);
+      return result.rating;
+    }
+  );
 };

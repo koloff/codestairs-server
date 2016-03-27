@@ -39,8 +39,7 @@ exports.save = function(req, res) {
 exports.getMultiple = function(req, res) {
   co(function *() {
     try {
-      let result = yield paths.getMultiple(req.query.start, req.query.count);
-      console.log(result);
+      let result = yield paths.getMultiple(req.query);
       res.status(200).send(result);
     } catch (err) {
       console.log(err);
@@ -87,6 +86,21 @@ exports.getByEditId = function(req, res) {
   }).catch(err => console.log(err));
 };
 
+
+exports.rate = function(req, res) {
+  return co(function *() {
+    try {
+      console.log(req.userId);
+      console.log(req.body);
+
+      let result = yield paths.rate(req.userId, req.params.pathId, req.body.value);
+      res.status(200).send(result);
+    } catch (err) {
+      console.log(err);
+      res.status(500);
+    }
+  });
+};
 
 //
 //function getMultiple(req, res) {

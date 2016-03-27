@@ -4,8 +4,7 @@ let router = require('express').Router();
 let authController = require('../controllers/auth');
 let usersController = require('../controllers/users');
 let resourcesController = require('../controllers/resources');
-let coursesController = require('../controllers/courses');
-let searchController = require('../controllers/search');
+let requestsController = require('../controllers/requests');
 
 let pathsController = require('../controllers/paths');
 
@@ -19,10 +18,6 @@ router.route('/resources')
   .get(resourcesController.getResources)
   .post(resourcesController.save);
 
-router.route('/courses')
-  .get(coursesController.getCourses)
-  .post(coursesController.save);
-
 router.route('/paths')
   .get(pathsController.getMultiple)
   .post(pathsController.save);
@@ -33,15 +28,10 @@ router.route('/paths/:id')
 router.route('/paths/edit/:editId')
   .get(pathsController.getByEditId);
 
-router.route('/courses/:courseId')
-  .post(coursesController.insertResources); //todo
+router.route('/rate/path/:pathId')
+  .post(authController.authenticate(), pathsController.rate);
 
-router.route('/rate/course/:courseId')
-  .post(authController.authenticate(), coursesController.rate);
-
-router.route('/search/:searchType')
-  .get(searchController.search);
-
-
+router.route('/requests')
+  .post(authController.authenticate(), requestsController.save);
 
 module.exports = router;

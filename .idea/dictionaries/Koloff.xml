@@ -2,6 +2,7 @@
   <dictionary name="Koloff">
     <words>
       <w>cors</w>
+      <w>downvotes</w>
       <w>editid</w>
       <w>hmac</w>
       <w>johncena</w>
@@ -9,6 +10,7 @@
       <w>screenshots</w>
       <w>searchtype</w>
       <w>shortid</w>
+      <w>upvotes</w>
       <w>webshot</w>
     </words>
   </dictionary>
