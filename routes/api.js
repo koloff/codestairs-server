@@ -3,6 +3,7 @@
 let router = require('express').Router();
 let authController = require('../controllers/auth');
 let usersController = require('../controllers/users');
+let socialController = require('../controllers/social');
 let resourcesController = require('../controllers/resources');
 let requestsController = require('../controllers/requests');
 
@@ -28,10 +29,18 @@ router.route('/paths/:id')
 router.route('/paths/edit/:editId')
   .get(pathsController.getByEditId);
 
-router.route('/rate/path/:pathId')
-  .post(authController.authenticate(), pathsController.rate);
-
 router.route('/requests')
-  .post(authController.authenticate(), requestsController.save);
+  .post(authController.authenticate(), requestsController.save)
+  .get(requestsController.getMultiple);
+
+router.route('/requests/:id')
+  .get(requestsController.getById);
+
+router.route('/rate/:entityId')
+  .post(authController.authenticate(), socialController.rateEntity);
+
+router.route('/comment/:entityId')
+  .post(authController.authenticate(), socialController.commentEntity);
+
 
 module.exports = router;

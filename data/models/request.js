@@ -1,6 +1,7 @@
 'use strict';
 let mongoose = require('mongoose');
-let commentSchema = require('./comment');
+let votes = require('./plugins/votes');
+let comments = require('./plugins/comments');
 
 let requestSchema = new mongoose.Schema({
   author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
@@ -12,9 +13,10 @@ let requestSchema = new mongoose.Schema({
   availableTime: {
     type: String
   },
-  comments: [{
-    type: commentSchema
-  }]
+  dateAdded: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 requestSchema.index(
@@ -23,6 +25,10 @@ requestSchema.index(
     wantsToLearn: 'text'
   }
 );
+
+
+requestSchema.plugin(votes);
+requestSchema.plugin(comments);
 
 
 module.exports = mongoose.model('Request', requestSchema);

@@ -18,7 +18,6 @@ exports.save = function(course) {
 };
 
 exports.getSingle = function(byWhat, identifier) {
-  console.log('getting single path');
   let query = {};
   query[byWhat] = identifier;
 
@@ -123,12 +122,3 @@ exports.search = function(phrase) {
   });
 };
 
-
-exports.rate = function(userId, pathId, value) {
-  return co(function *() {
-      let path = yield Path.findById(pathId);
-      let result = yield path.vote(userId, value);
-      return result.rating;
-    }
-  );
-};
