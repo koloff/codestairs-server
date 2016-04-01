@@ -4,8 +4,6 @@ let paths = require('./paths');
 let requests = require('./requests');
 
 
-
-
 // function lookForCommentInAllCollections(commentId) {
 //   co(function *() {
 //     let result = yield {
@@ -56,7 +54,7 @@ exports.comment = function(userId, entityId, comment) {
       let request = yield requests.getById(entityId);
       if (request) {
         let result = yield request.comment(userId, comment);
-        return result;
+        return result.getAllComments();
       }
 
     }

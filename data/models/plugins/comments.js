@@ -10,6 +10,10 @@ let commentSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true
+  },
+  dateAdded: {
+    type: Date,
+    default: Date.now
   }
 });
 
@@ -29,13 +33,12 @@ function comments(schema, options) {
   });
 
   schema.methods.comment = function(userId, comment) {
-    console.log('args');
-    console.log(arguments);
 
     let self = this;
     return co(function *() {
       self.comments.push({author: userId, text: comment});
-      return yield self.save();
+      let result = yield self.save({'new': true});
+      return result;
     });
 
   };
@@ -52,7 +55,11 @@ function comments(schema, options) {
 
 
   schema.methods.getAllComments = function() {
-    return this.comments;
+    let self = this;
+    return co(function *() {
+      let result = self.populate('comments.author', 'username');
+      return result.comments;
+    });
   };
 
 }

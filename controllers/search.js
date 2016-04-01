@@ -1,7 +1,7 @@
 'use strict';
 let co = require('co');
-let resources = require('../data/resources');
-let courses = require('../data/courses');
+let paths = require('../data/paths');
+let requests = require('../data/requests');
 
 exports.search = function(req, res) {
   let searchType = req.params.searchType;
@@ -12,11 +12,11 @@ exports.search = function(req, res) {
 
     // different type of search
 
-    if (searchType === 'resources') {
+    if (searchType === 'paths') {
       co(function *() {
         try {
-          let result = yield resources.search(phrase);
-          console.log('Resources search completed!');
+          let result = yield paths.search(phrase);
+          console.log('Paths search completed!');
           console.log(result);
           res.status(200).send(result);
         } catch (err) {
@@ -25,12 +25,11 @@ exports.search = function(req, res) {
           res.status(400).send(err).end();
         }
       });
-    } else if (searchType == 'courses') {
+    } else if (searchType == 'requests') {
       co(function *() {
         try {
-          console.log('searching courses...');
-          let result = yield courses.search(phrase);
-          console.log('Courses search completed!');
+          let result = yield requests.search(phrase);
+          console.log('Requests search completed!');
           console.log(result);
           res.status(200).send(result);
         } catch (err) {
@@ -48,7 +47,7 @@ exports.search = function(req, res) {
 
   } else {
     console.log('NO_PHRASE');
-    res.status(400).send({
+    res.status(404).send({
       error: true,
       reason: 'NO_PHRASE'
     });

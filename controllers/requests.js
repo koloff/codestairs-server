@@ -26,7 +26,7 @@ exports.getById = function(req, res) {
         res.status(400).send({reason: err}).end();
       }
 
-      res.status(500).send({reason: err}).end();
+      res.status(404).send({reason: err}).end();
     }
   }).catch(err => console.log(err));
 };

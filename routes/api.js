@@ -6,6 +6,7 @@ let usersController = require('../controllers/users');
 let socialController = require('../controllers/social');
 let resourcesController = require('../controllers/resources');
 let requestsController = require('../controllers/requests');
+let searchController = require('../controllers/search');
 
 let pathsController = require('../controllers/paths');
 
@@ -22,6 +23,10 @@ router.route('/resources')
 router.route('/paths')
   .get(pathsController.getMultiple)
   .post(pathsController.save);
+
+router.route('/search/:searchType')
+  .get(searchController.search);
+
 
 router.route('/paths/:id')
   .get(pathsController.getById);

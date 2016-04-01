@@ -9,8 +9,6 @@ exports.commentEntity = function (req, res) {
   co(function *() {
     try {
       let result = yield social.comment(req.userId, req.params.entityId, req.body.comment);
-      console.log('resulkt');
-      console.log(result);
       res.status(200).send(result);
     } catch(err) {
       console.log(err);

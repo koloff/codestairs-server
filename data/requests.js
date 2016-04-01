@@ -5,7 +5,11 @@ let co = require('co');
 
 exports.getById = function(id) {
   return co(function *() {
-    return yield Request.findOne({'_id': id});
+    return yield Request
+      .findOne({'_id': id})
+      .populate('author', 'username')
+      .populate('comments.author', 'username')
+      .exec();
   });
 };
 
@@ -44,3 +48,17 @@ exports.getMultiple = function(options) {
 
 };
 
+exports.search = function(phrase) {
+  return co(function *() {
+
+    let result = yield Request.find({
+        $text: {$search: phrase}
+      }, {
+        score: {$meta: "textScore"}
+      })
+      .sort({score: {$meta: 'textScore'}})
+      .exec();
+
+    return result;
+  });
+};

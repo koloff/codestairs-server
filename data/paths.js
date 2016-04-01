@@ -7,11 +7,11 @@ let Path = require('./models').Path;
 let users = require('./users');
 
 // todo
-exports.save = function(course) {
+exports.save = function(path) {
   return co(function *() {
-    console.log('course:');
-    console.log(course);
-    let courseToSave = new Path(course);
+    console.log('path:');
+    console.log(path);
+    let courseToSave = new Path(path);
     let saved = yield courseToSave.save();
     return saved;
   });
@@ -73,7 +73,6 @@ exports.search = function(phrase) {
       {$text: {$search: phrase}},
       {score: {$meta: "textScore"}})
       .sort({score: {$meta: 'textScore'}})
-      .populate('resources', '-text -html -tags')
       .exec();
 
 
@@ -102,10 +101,6 @@ exports.search = function(phrase) {
         .exec();
     }
 
-    //console.log('coursesByData');
-    //console.log(coursesByData);
-    //console.log('coursesByResources');
-    //console.log(coursesByResources);
 
     //join te results and remove duplicates
     let union = _(_.union(pathsByData, pathsByResources))
