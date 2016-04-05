@@ -117,3 +117,11 @@ exports.search = function(phrase) {
   });
 };
 
+
+exports.addResource = function(pathId, resource) {
+  return co(function *() {
+    console.log(pathId);
+    console.log(resource.url);
+    return 'pesho';
+  });
+};

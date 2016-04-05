@@ -32,7 +32,8 @@ router.route('/paths/:id')
   .get(pathsController.getById);
 
 router.route('/paths/edit/:editId')
-  .get(pathsController.getByEditId);
+  .get(pathsController.getByEditId)
+  .put(pathsController.addResource);
 
 router.route('/requests')
   .post(authController.authenticate(), requestsController.save)

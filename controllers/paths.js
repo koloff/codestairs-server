@@ -88,7 +88,7 @@ exports.getByEditId = function(req, res) {
 
 
 exports.rate = function(req, res) {
-  return co(function *() {
+  co(function *() {
     try {
       console.log(req.userId);
       console.log(req.body);
@@ -102,50 +102,16 @@ exports.rate = function(req, res) {
   });
 };
 
-//
-//function getMultiple(req, res) {
-//  co(function *() {
-//    try {
-//      let result = yield paths.getMultiple(req.query.start, req.query.count);
-//      console.log(result);
-//      res.status(200).send(result);
-//    } catch(err) {
-//      console.log(err);
-//      if (err === 'INVALID_ARGUMENTS') {
-//        res.status(400).send({reason: err}).end();
-//      }
-//
-//      res.status(500).send({reason: err}).end();
-//    }
-//  }).catch(err => console.log(err));
-//}
-//
-//function getOne(req, res) {
-//  co(function *() {
-//    try {
-//      let result = yield paths.getSingle(req.query.start, req.query.count);
-//      console.log(result);
-//      res.status(200).send(result);
-//    } catch(err) {
-//      console.log(err);
-//      if (err === 'INVALID_ARGUMENTS') {
-//        res.status(400).send({reason: err}).end();
-//      }
-//
-//      res.status(500).send({reason: err}).end();
-//    }
-//  }).catch(err => console.log(err));
-//}
-//
-//exports.getPaths = function(req, res) {
-//  if (req.query.byWhat) {
-//    getOne(req, res);
-//  } else if (req.query.start || req.query.count) {
-//    getMultiple(req, res);
-//  }
-//
-//  else {
-//    res.status(400).send({reason: 'INVALID_QUERY'});
-//  }
-//};
 
+exports.addResource = function(req, res) {
+  co(function *() {
+    try {
+      console.log(req.body);
+      let result = yield paths.addResource(req.params.editId, req.body);
+      res.status(200).send(result);
+    } catch (err) {
+      console.log(err);
+      res.status(500);
+    }
+  });
+};
