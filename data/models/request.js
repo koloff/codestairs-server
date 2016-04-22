@@ -21,8 +21,7 @@ let requestSchema = new mongoose.Schema({
 
 requestSchema.index(
   {
-    knows: 'text',
-    wantsToLearn: 'text'
+    '$**': 'text'
   }
 );
 
