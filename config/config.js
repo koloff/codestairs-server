@@ -7,7 +7,7 @@ console.log(env);
 let settings;
 if (env === 'development') {
   settings ={
-    "diffbotToken": "75ed683d89300b4b7eb73ff7e877e715",
+    "diffbotToken": "5873a2ba4f96a5e04a46fa9661d799bc",
     "port": 3377,
     "db": "mongodb://localhost/codestairs",
     "secret": "johncena"

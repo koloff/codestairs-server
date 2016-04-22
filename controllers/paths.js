@@ -106,9 +106,9 @@ exports.rate = function(req, res) {
 exports.addResource = function(req, res) {
   co(function *() {
     try {
-      console.log(req.body);
-      let result = yield paths.addResource(req.params.editId, req.body);
-      res.status(200).send(result);
+      console.log('extracted');
+      console.log(req.extractedResource);
+      let path = yield paths.addResource(req.params.editId, req.extractedResource, req.body);
     } catch (err) {
       console.log(err);
       res.status(500);

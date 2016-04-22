@@ -33,7 +33,7 @@ router.route('/paths/:id')
 
 router.route('/paths/edit/:editId')
   .get(pathsController.getByEditId)
-  .put(pathsController.addResource);
+  .put(resourcesController.save, pathsController.addResource);
 
 router.route('/requests')
   .post(authController.authenticate(), requestsController.save)

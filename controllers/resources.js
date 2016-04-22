@@ -12,7 +12,7 @@ let config = require('../config/config');
  * @param req Body contains {url, title, description}
  * @param res
  */
-exports.save = function(req, res) {
+exports.save = function(req, res, next) {
   co(function *() {
 
     // should contain {url, title, description}
@@ -23,6 +23,11 @@ exports.save = function(req, res) {
     // check if resource is already added
     let alreadySaved = yield resources.findByUrl(req.body.url);
     if (alreadySaved) {
+      if (req.body.duration) {
+        req.extractedResource = alreadySaved;
+        next();
+      }
+
       res.status(200).send({
         ok: true,
         resource: alreadySaved
@@ -84,6 +89,11 @@ exports.save = function(req, res) {
         console.log('Resource saved!');
         if (savedResource) {
           savedResource = savedResource.short;
+        }
+
+        if (req.body.duration) {
+          req.extractedResource = savedResource;
+          next();
         }
 
         res.status(200).send({

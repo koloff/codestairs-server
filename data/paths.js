@@ -5,6 +5,7 @@ let _ = require('lodash');
 let resources = require('./resources');
 let Path = require('./models').Path;
 let users = require('./users');
+let extractor = require('./../utils/extractor');
 
 // todo
 exports.save = function(path) {
@@ -118,10 +119,26 @@ exports.search = function(phrase) {
 };
 
 
-exports.addResource = function(pathId, resource) {
+exports.addResource = function(pathEditId, extractedData, specifiedData) {
   return co(function *() {
-    console.log(pathId);
-    console.log(resource.url);
-    return 'pesho';
+    console.log('specified data');
+    console.log(specifiedData);
+    let resourceToPush = {
+      extracted: extractedData._id,
+      title: specifiedData.title || specifiedData.url,
+      description: specifiedData.description,
+      duration: specifiedData.duration,
+      difficulty: specifiedData.difficulty
+    };
+    console.log('resource to push');
+    console.log(resourceToPush);
+    let path = yield Path.update({editId: pathEditId}, {
+      $push: {
+        'resources': resourceToPush
+      }
+    });
+
+    console.log('path saved');
+    console.log(path);
   });
 };
