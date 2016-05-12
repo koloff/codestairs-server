@@ -19,11 +19,9 @@ let requestSchema = new mongoose.Schema({
   }
 });
 
-requestSchema.index(
-  {
+requestSchema.index({
     '$**': 'text'
-  }
-);
+});
 
 
 requestSchema.plugin(votes);

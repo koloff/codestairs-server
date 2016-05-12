@@ -35,12 +35,10 @@ let pathSchema = new mongoose.Schema({
 });
 
 pathSchema.index({
-  dateAdded: -1
-});
-
-pathSchema.index({
+  dateAdded: -1,
   '$**': 'text'
 });
+
 
 pathSchema.plugin(votes);
 

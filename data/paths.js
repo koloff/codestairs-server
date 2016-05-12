@@ -39,12 +39,15 @@ exports.getMultiple = function(options) {
   let criteria = options.criteria;
   let start = options.start | 0;
   let count = options.count | 0;
+  console.log(options);
+
+
 
 
   return co(function *() {
     let result = yield Path
       .find()
-      .where('dateAdded').gte(new Date().getTime() - 1000 * 60 * 60 * period)
+      .where('dateAdded').gte(new Date().getTime() - 1000 * 60 * 60 * period) //
       .sort(`${criteria === 'most-liked' ? '-rating.value' : '-dateAdded'}`)
       .skip(start)
       .limit(count)
