@@ -145,3 +145,27 @@ exports.addResource = function(pathEditId, extractedData, specifiedData) {
     console.log(path);
   });
 };
+
+
+exports.deleteLatest = function(count) {
+  return co(function *() {
+    try {
+
+      let docs = yield Path.find({})
+        .sort({dateAdded: -1})
+        .limit(count)
+        .exec();
+
+      let removedIdsArray = docs
+        .map(function(doc) {
+          return doc._id;
+        });
+
+      yield Path.remove({_id: {$in: removedIdsArray}})
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  });
+};

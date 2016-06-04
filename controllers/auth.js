@@ -19,7 +19,6 @@ function validateUser(username, password) {
 
 
 exports.login = function(req, res) {
-  console.log(req.body);
   var username = req.body.username;
   var password = req.body.password;
 
@@ -30,10 +29,9 @@ exports.login = function(req, res) {
   co(function *() {
     try {
     	let user = yield validateUser(username, password);
-      console.log(user);
       if (user) {
         res.status(200).send({
-          token: user.token,
+          token: token.generate(user),
           profile: user.profile
         });
       } else {

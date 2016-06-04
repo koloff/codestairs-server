@@ -7,6 +7,7 @@ let socialController = require('../controllers/social');
 let resourcesController = require('../controllers/resources');
 let requestsController = require('../controllers/requests');
 let searchController = require('../controllers/search');
+let adminController = require('../controllers/admin');
 
 let pathsController = require('../controllers/paths');
 
@@ -27,7 +28,6 @@ router.route('/paths')
 router.route('/search/:searchType')
   .get(searchController.search);
 
-
 router.route('/paths/:id')
   .get(pathsController.getById);
 
@@ -47,6 +47,9 @@ router.route('/rate/:entityId')
 
 router.route('/comment/:entityId')
   .post(authController.authenticate(), socialController.commentEntity);
+
+router.route('/admin/delete')
+  .delete(authController.authenticate('admin'), adminController.deleteEntry);
 
 
 module.exports = router;

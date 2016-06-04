@@ -62,3 +62,37 @@ exports.search = function(phrase) {
     return result;
   });
 };
+
+
+exports.deleteLatest = function(count) {
+  return co(function *() {
+    try {
+
+      let docs = yield Request.find({})
+        .sort({dateAdded: -1})
+        .limit(count)
+        .exec();
+
+      let removedIdsArray = docs
+        .map(function(doc) {
+          return doc._id;
+        });
+
+      yield Request.remove({_id: {$in: removedIdsArray}})
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  });
+};
+
+
+exports.deleteByRegex = function(field, regex) {
+  return co(function *() {
+    let query = {};
+    query[field] = {$regex: new RegExp(regex)};
+
+    yield Requests.remove(query);
+  });
+};
